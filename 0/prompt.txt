@@ -1,0 +1,1 @@
+"Create a file called PROJECT_NOTES.md containing a one-line description: 'Autopsy - a debugger for AI agent mistakes, built at neatHack 2026.'"

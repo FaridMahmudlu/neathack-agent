@@ -1,0 +1,269 @@
+{
+  "info": {
+    "id": "ses_ed9e69d2dffeHa2bRPjt4THYWk",
+    "slug": "sunny-cactus",
+    "projectID": "3d4ab3e6efc6c4506fd307309e19fa7248a3be95",
+    "directory": "C:\\Users\\seid2\\Desktop\\NetHack",
+    "path": "",
+    "title": "Autopsy debugger project notes",
+    "agent": "build",
+    "model": {
+      "id": "claude-haiku",
+      "providerID": "litellm",
+      "variant": "default"
+    },
+    "version": "1.18.35",
+    "summary": {
+      "additions": 0,
+      "deletions": 0,
+      "files": 0
+    },
+    "cost": 0,
+    "tokens": {
+      "input": 9102,
+      "output": 152,
+      "reasoning": 0,
+      "cache": {
+        "read": 8955,
+        "write": 0
+      }
+    },
+    "permission": [
+      {
+        "permission": "question",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_enter",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_exit",
+        "pattern": "*",
+        "action": "deny"
+      }
+    ],
+    "time": {
+      "created": 1791640560338,
+      "updated": 1791640565663
+    }
+  },
+  "messages": [
+    {
+      "info": {
+        "role": "user",
+        "time": {
+          "created": 1791640560441
+        },
+        "agent": "build",
+        "model": {
+          "providerID": "litellm",
+          "modelID": "claude-haiku"
+        },
+        "summary": {
+          "diffs": [
+            {
+              "file": "PROJECT_NOTES.md",
+              "patch": "Index: PROJECT_NOTES.md\n===================================================================\n--- PROJECT_NOTES.md\t\n+++ PROJECT_NOTES.md\t\n@@ -0,0 +1,1 @@\n+Autopsy - a debugger for AI agent mistakes, built at neatHack 2026.\n\\ No newline at end of file\n",
+              "additions": 1,
+              "deletions": 0,
+              "status": "added"
+            }
+          ]
+        },
+        "id": "msg_1261963390011n5ayirg7BiIYe",
+        "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "\"Create a file called PROJECT_NOTES.md containing a one-line description: 'Autopsy - a debugger for AI agent mistakes, built at neatHack 2026.'\"",
+          "id": "prt_126196342001oO2vYFDx7C1Fyt",
+          "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk",
+          "messageID": "msg_1261963390011n5ayirg7BiIYe"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_1261963390011n5ayirg7BiIYe",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "C:\\Users\\seid2\\Desktop\\NetHack",
+          "root": "C:\\Users\\seid2\\Desktop\\NetHack"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 9083,
+          "input": 8958,
+          "output": 125,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 0
+          }
+        },
+        "modelID": "claude-haiku",
+        "providerID": "litellm",
+        "time": {
+          "created": 1791640561180,
+          "completed": 1791640565648
+        },
+        "finish": "tool-calls",
+        "id": "msg_12619661c0010GZym4wvcvhzgX",
+        "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk"
+      },
+      "parts": [
+        {
+          "snapshot": "9d2928494199964226e85a73e247ce94fc4710dd",
+          "type": "step-start",
+          "id": "prt_126197353001QD5y1LmCJOQhE5",
+          "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk",
+          "messageID": "msg_12619661c0010GZym4wvcvhzgX"
+        },
+        {
+          "type": "text",
+          "text": "I'll create the PROJECT_NOTES.md file with the specified content.",
+          "time": {
+            "start": 1791640564567,
+            "end": 1791640565223
+          },
+          "id": "prt_126197357001QwhpXhO0hlaLSd",
+          "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk",
+          "messageID": "msg_12619661c0010GZym4wvcvhzgX"
+        },
+        {
+          "type": "tool",
+          "tool": "write",
+          "callID": "tooluse_qw8fZPHNK1lP9OievvZhoS",
+          "state": {
+            "status": "completed",
+            "input": {
+              "filePath": "C:\\Users\\seid2\\Desktop\\NetHack\\PROJECT_NOTES.md",
+              "content": "Autopsy - a debugger for AI agent mistakes, built at neatHack 2026."
+            },
+            "output": "Wrote file successfully.",
+            "metadata": {
+              "diagnostics": {},
+              "filepath": "C:\\Users\\seid2\\Desktop\\NetHack\\PROJECT_NOTES.md",
+              "exists": false,
+              "truncated": false
+            },
+            "title": "PROJECT_NOTES.md",
+            "time": {
+              "start": 1791640565127,
+              "end": 1791640565146
+            }
+          },
+          "id": "prt_12619741b0013YA83jbiuvjJQN",
+          "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk",
+          "messageID": "msg_12619661c0010GZym4wvcvhzgX"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "587b29513c1be32e15792303013fb9c70036fb18",
+          "type": "step-finish",
+          "tokens": {
+            "total": 9083,
+            "input": 8958,
+            "output": 125,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 0
+            }
+          },
+          "cost": 0,
+          "id": "prt_1261976e3001AA9k5nmQ9giPiF",
+          "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk",
+          "messageID": "msg_12619661c0010GZym4wvcvhzgX"
+        },
+        {
+          "type": "patch",
+          "hash": "9d2928494199964226e85a73e247ce94fc4710dd",
+          "files": [
+            "C:/Users/seid2/Desktop/NetHack/PROJECT_NOTES.md"
+          ],
+          "id": "prt_12619778c001Q1A97eluUYw4s3",
+          "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk",
+          "messageID": "msg_12619661c0010GZym4wvcvhzgX"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_1261963390011n5ayirg7BiIYe",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "C:\\Users\\seid2\\Desktop\\NetHack",
+          "root": "C:\\Users\\seid2\\Desktop\\NetHack"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 9126,
+          "input": 144,
+          "output": 27,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 8955
+          }
+        },
+        "modelID": "claude-haiku",
+        "providerID": "litellm",
+        "time": {
+          "created": 1791640565652,
+          "completed": 1791640566926
+        },
+        "finish": "stop",
+        "id": "msg_126197794001P6Ecija86VfOqD",
+        "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk"
+      },
+      "parts": [
+        {
+          "snapshot": "587b29513c1be32e15792303013fb9c70036fb18",
+          "type": "step-start",
+          "id": "prt_126197af80017qYF2rdKvEwguQ",
+          "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk",
+          "messageID": "msg_126197794001P6Ecija86VfOqD"
+        },
+        {
+          "type": "text",
+          "text": "Done! I've created `PROJECT_NOTES.md` with the one-line description about Autopsy.",
+          "time": {
+            "start": 1791640566524,
+            "end": 1791640566682
+          },
+          "id": "prt_126197afc001LSd4z3XnoDrlCs",
+          "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk",
+          "messageID": "msg_126197794001P6Ecija86VfOqD"
+        },
+        {
+          "reason": "stop",
+          "snapshot": "587b29513c1be32e15792303013fb9c70036fb18",
+          "type": "step-finish",
+          "tokens": {
+            "total": 9126,
+            "input": 144,
+            "output": 27,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 8955
+            }
+          },
+          "cost": 0,
+          "id": "prt_126197c12001pC7jAke1mm72kf",
+          "sessionID": "ses_ed9e69d2dffeHa2bRPjt4THYWk",
+          "messageID": "msg_126197794001P6Ecija86VfOqD"
+        }
+      ]
+    }
+  ]
+}
