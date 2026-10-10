@@ -68,3 +68,30 @@ answer about the flag"
 .venv/Scripts/python -m demo_agent "Which city is the capital of Azerbaijan
 and what does its flag look like?"
 ```
+
+## Narration (AI-generated, ready)
+
+`demo_assets/narration/` — 8 mp3 files (gTTS, `en` voice), one per scene
+above. Drop each onto its scene in the editor.
+
+### Recording the screen (Windows)
+
+1. Open **Clipchamp** (built into Windows 11) → New video
+2. Record → **Screen** → record the terminal while running the commands
+   below (also grab a neatlogs dashboard shot + the Entire commit page)
+3. Import the mp3s, drag each under its scene, trim silences, export 1080p
+
+### Exact command sequence to record
+
+```bash
+# scene 2 — put the buggy file back in the working tree
+git checkout dece484 -- demo_agent/app.py
+.venv/Scripts/python -m demo_agent "Which city is the capital of Azerbaijan and what does its flag look like?"
+
+# scenes 4–5 — let Autopsy investigate (new trace id appears in output/dashboard)
+.venv/Scripts/python -m agent_debugger "the demo agent returned an incomplete answer about the flag — find the culprit"
+
+# scene 7 — restore the fix and verify
+git checkout main -- demo_agent/app.py
+.venv/Scripts/python -m demo_agent "Which city is the capital of Azerbaijan and what does its flag look like?"
+```
