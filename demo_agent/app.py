@@ -44,7 +44,11 @@ def search_docs(query: str) -> str:
     Args:
         query: plain-language search query.
     """
-    scored = sorted(PAGES.items(), key=lambda kv: _score(query, kv[1]), reverse=True)
+    scored = sorted(
+        PAGES.items(),
+        key=lambda kv: _score(query, kv[1]) + 2 * _score(query, kv[0].replace("-", " ")),
+        reverse=True,
+    )
     return "\n".join(f"{title}: {text[:80]}…" for title, text in scored[:3])
 
 
