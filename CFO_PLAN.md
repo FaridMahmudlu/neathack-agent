@@ -1,83 +1,81 @@
-# Autopsy — Business Plan (cfo.ai workspace)
+# Autopsy — Business Plan (built with cfo.ai)
 
-> Paste-ready content for the cfo.ai neatHack workspace. Numbers are
-> deliberately conservative and reproducible — every figure traces to an
-> assumption listed below.
+> Modeled in the cfo.ai neatHack workspace:
+> https://cfo.ai/s/gWOEX-_KzKXUshRa
+> The headline below is what the model found — including the part that
+> hurts. We keep it honest: the fix is the plan, not the spin.
 
 ## What we sell
 
 **Autopsy** is a root-cause debugger for production AI agents. Observability
 tools show *what* went wrong; Autopsy tells you *why* — by joining runtime
-traces with the development history (which coding-agent session/commit
+traces with development history (which coding-agent session/commit
 introduced the regression) and returning a diagnosis with verifiable
-evidence pointers plus a suggested fix.
+evidence plus a suggested fix.
 
 **Buyer:** platform / AI-infra teams shipping LLM agents to production.
-**Pain:** a failed agent run today costs an engineer 30–90 min of manual
-trace reading + `git blame` archaeology. Autopsy compresses that to ~2 min.
+**Pain:** a failed agent run costs an engineer 30–90 min of manual trace
+reading + `git blame` archaeology. Autopsy compresses that to ~2 min.
 
 ## Pricing
 
 | Tier | Price | Includes |
 |---|---|---|
-| Free | $0 | 50 diagnoses/mo, 1 repo, community support |
-| Pro | $79/mo/seat | 500 diagnoses/mo, unlimited repos, Slack alerts |
-| Team | $499/mo (5 seats) | 5k diagnoses/mo, CI gate ("fail PR if culprit change detected"), SSO |
-| Enterprise | custom | self-hosted, custom retention, SLA |
+| Free | $0 | 25–50 diagnoses/mo, 1 repo |
+| Pro | $79/mo/seat | 500 diagnoses/mo |
+| Team | $499/mo (5 seats) | 2k diagnoses/mo, CI gate, SSO |
+| Enterprise | ~$4k/mo (placeholder) | 15k diagnoses, self-hosted, SLA |
 
-Usage overage: $0.50 per extra diagnosis.
+Overage: $0.50 per diagnosis — required, not optional (see below).
 
-## Unit economics (per diagnosis)
+## What the model found (the honest part)
 
-Measured on our own demo (Claude Sonnet 4.6 via LiteLLM, 19 LLM calls,
-10 tool calls):
+Variable cost per diagnosis ≈ **$0.35** (LLM $0.30 — 86% of cost — +
+observability $0.02 + infra $0.03). At 40% utilization:
 
-| Cost item | Amount |
-|---|---|
-| LLM inference (~40k tok in / ~4k tok out) | ~$0.30 |
-| neatlogs ingestion + storage (allocated) | ~$0.02 |
-| Infra (compute, queue, db) | ~$0.03 |
-| **Total variable cost** | **~$0.35** |
-
-At Pro pricing ($79/seat, ~500 diagnoses included ⇒ $0.16/diagnosis list)
-the marginal cost exceeds list price at full utilization — so included
-allotments assume ~40% utilization (industry typical), effective revenue
-per *used* diagnosis ≈ $0.40. **Gross margin ≈ 55% on Pro, ~75% blended**
-(Team/Enterprise carry the margin; overage at $0.50 is ~30% margin).
-
-Honest note: the moat is workflow + evidence quality, not raw margin —
-observability ingestion is a commodity; the value is the diagnosis.
-
-## Market
-
-- ~150k teams are shipping or piloting LLM agents (2026)
-- SAM: teams already paying for agent observability ≈ 25k teams
-- SOM (3 yr): 1.5% of SAM ≈ 375 paying teams
-
-## Revenue scenarios (MRR, end of year 1)
-
-| Scenario | Teams | Mix | MRR |
+| Plan | Revenue | Cost to serve | Gross margin |
 |---|---|---|---|
-| Base | 40 | 30 Pro ($79) + 10 Team ($499) | ~$7.4k |
-| Growth | 120 | 80 Pro + 40 Team | ~$26k |
-| Breakout | 350 | 200 Pro + 140 Team + 10 Ent ($2k) | ~$106k |
+| Pro (2 seats) | $158 | $140 | 11% |
+| Team | $499 | $700 | **−40%** |
+| Enterprise | $4,000 | $2,100 | 48% |
 
-## Costs & runway ($500k pre-seed)
+At list prices **Team loses ~$201/customer/month**; blended margin at
+month 12 is −3% to −10% and the business never breaks even — $500k runs
+out in ~21 months in every scenario.
 
-| Item | Monthly |
-|---|---|
-| 3 engineers (founders, below-market) | $18k |
-| Infra + LLM + neatlogs COGS | $2k → scales with usage |
-| Tools/G&A | $1.5k |
-| **Burn** | **~$21.5k** |
+## The fix (margin scenario)
 
-Base case reaches ~$7.4k MRR by month 12 ⇒ net burn ≈ $14k/mo ⇒
-**runway ≈ 24 months** on $500k. Growth case reaches cash-flow breakeven
-around month 14–16.
+1. **Cost curve:** $0.35 → **$0.17**/diagnosis — cache repeated
+   investigations, route simpler failures to smaller models, batch calls.
+2. **Reprice:** Team $499 → **$799** with overage charge; trim included
+   allotments (Team 5k→2k, Free 50→25); Enterprise = cost-plus.
+3. **Hard caps / overage** so heavy users can't sink the margin.
 
-## What we spend the hackathon proving
+Result: blended gross margin → **~64%**, cash-flow positive **month 16**
+(Jan 2028), cash bottoms at ~$323k of the $500k — **the raise is never
+fully consumed**.
 
-The demo *is* the product's core loop working end-to-end on a real failure:
-trace → suspect span → culprit checkpoint → fix → verified re-run. The next
-90 days: GitHub App ingestion (auto-diagnose failed CI agent runs), and
-pricing validated via 10 design-partner teams.
+## Scenarios (MRR at month 12, pre-fix list prices)
+
+| Scenario | Paid accounts | MRR |
+|---|---|---|
+| Base | 51 | $23.8k |
+| Growth | 93 | $43.0k |
+| Breakout | 170 | $78.2k |
+
+Base reaches ~360 paid teams by month 36 (~1.5% of the 25k-team SAM).
+
+## Top 3 financial risks (per the model)
+
+1. **Cost per diagnosis** — LLM inference is 86% of variable cost; treat it
+   as the north-star engineering metric.
+2. **Price/usage mismatch** — Team charges $0.10/diagnosis that costs
+   $0.35 to serve; caps and overage are mandatory.
+3. **Concentrated runway** — Enterprise carries most of the profit; one
+   slipped deal puts fundraising mode at ~month 15.
+
+## Pitch line
+
+> "We've modeled it: at list prices the unit economics don't work — so we
+> built the cost curve to fix it. 64% gross margin and breakeven at month
+> 16 on the money we've already raised."

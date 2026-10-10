@@ -1,0 +1,31 @@
+# Autopsy demo — voiceover script (read aloud, one block per scene)
+# Pace: conversational, ~150wpm. Leave ~1s silence at each === mark.
+
+=== SCENE 1 (0-7s)
+Your agent gave a wrong answer. Why?
+
+=== SCENE 2 (7-18s)
+This research agent answers questions from a small document corpus.
+Asked about Azerbaijan's flag, it can only name the capital.
+The flag details are missing — and the whole run is traced in neatlogs.
+
+=== SCENE 3 (18-28s)
+Four calls to search docs. Every single one returns the same three pages.
+The problem isn't the model — it's retrieval.
+
+=== SCENE 4 (28-50s)
+Autopsy investigates. It's an agent itself — ten tools over the neatlogs
+API, Entire checkpoints, and the code graph. Watch what it finds.
+
+=== SCENE 5 (50-62s)
+Diagnosis: the sort was flipped to ascending — the least relevant pages
+come first. Culprit: checkpoint 01M4K1P5, commit dece484 —
+a debugging flip that got committed.
+
+=== SCENE 6 (62-72s)
+Fixed, committed, re-run — the full answer is back: a tricolour of blue,
+red, and green, with a crescent and an eight-pointed star.
+
+=== SCENE 7 (72-80s)
+Autopsy — the debugger that joins what your agent did with why the code
+became wrong. Team Last Commit, neatHack 2026.

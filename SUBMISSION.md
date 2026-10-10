@@ -53,9 +53,12 @@ Key traces (project `2258b224-229a-445d-ad30-045c4978ba1a`):
 
 ## Use of cfo.ai
 
-Business plan in [CFO_PLAN.md](CFO_PLAN.md): pricing tiers, unit economics
-(cost per diagnosis ~$0.35 LLM + infra), revenue model, 18-month runway on a
-$500k pre-seed, base/growth scenarios.
+Business plan built in the cfo.ai workspace:
+https://cfo.ai/s/gWOEX-_KzKXUshRa — assumptions tables, monthly
+revenue/cash engine, 4+ scenarios, dashboards. Summary in
+[CFO_PLAN.md](CFO_PLAN.md). Headline: list prices lose money on the Team
+tier (−40% margin) — the model found it, we built the cost curve to fix it
+(64% blended margin, breakeven month 16).
 
 ## Demo
 
