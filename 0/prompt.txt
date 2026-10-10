@@ -1,0 +1,1 @@
+"In demo_agent/app.py, restore SYSTEM_PROMPT to require answering ONLY via the search_docs and fetch_page tools — never the model's own knowledge — and always cite the page titles relied on. Revert the earlier 'relax constraints' change."
