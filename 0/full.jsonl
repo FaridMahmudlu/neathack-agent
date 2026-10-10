@@ -1,0 +1,380 @@
+{
+  "info": {
+    "id": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+    "slug": "neon-eagle",
+    "projectID": "3d4ab3e6efc6c4506fd307309e19fa7248a3be95",
+    "directory": "C:\\Users\\seid2\\Desktop\\NetHack",
+    "path": "",
+    "title": "Debug ranking order",
+    "agent": "build",
+    "model": {
+      "id": "claude-haiku",
+      "providerID": "litellm",
+      "variant": "default"
+    },
+    "version": "1.18.35",
+    "summary": {
+      "additions": 0,
+      "deletions": 0,
+      "files": 0
+    },
+    "cost": 0,
+    "tokens": {
+      "input": 1788,
+      "output": 420,
+      "reasoning": 0,
+      "cache": {
+        "read": 27641,
+        "write": 0
+      }
+    },
+    "permission": [
+      {
+        "permission": "question",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_enter",
+        "pattern": "*",
+        "action": "deny"
+      },
+      {
+        "permission": "plan_exit",
+        "pattern": "*",
+        "action": "deny"
+      }
+    ],
+    "time": {
+      "created": 1791640656766,
+      "updated": 1791640664730
+    }
+  },
+  "messages": [
+    {
+      "info": {
+        "role": "user",
+        "time": {
+          "created": 1791640656856
+        },
+        "agent": "build",
+        "model": {
+          "providerID": "litellm",
+          "modelID": "claude-haiku"
+        },
+        "summary": {
+          "diffs": [
+            {
+              "file": "demo_agent/app.py",
+              "patch": "Index: demo_agent/app.py\n===================================================================\n--- demo_agent/app.py\t\n+++ demo_agent/app.py\t\n@@ -1,77 +1,77 @@\n \"\"\"A tiny research agent: answers a question using two tools over a small\r\n offline corpus. It is the *target* the debugger investigates — its own\r\n runs are traced to neatlogs under workflow 'demo-research-agent'.\r\n \"\"\"\r\n \r\n import neatlogs\r\n \r\n from common import llm, toolcall\r\n \r\n PAGES = {\r\n     \"flag-of-azerbaijan\": (\r\n         \"The national flag of Azerbaijan is a horizontal tricolour of blue, \"\r\n         \"red, and green, with a white crescent and an eight-pointed star in \"\r\n         \"the centre. It was readopted in 1991 after independence.\"\r\n     ),\r\n     \"baku\": (\r\n         \"Baku is the capital and largest city of Azerbaijan, located on the \"\r\n         \"Absheron Peninsula along the Caspian Sea. Its population is about \"\r\n         \"2.3 million.\"\r\n     ),\r\n     \"flag-of-turkiye\": (\r\n         \"The flag of Turkiye is red with a white crescent and a five-pointed \"\r\n         \"star. It should not be confused with the eight-pointed star of \"\r\n         \"Azerbaijan's flag.\"\r\n     ),\r\n     \"crescent-symbolism\": (\r\n         \"The crescent appears on several national flags, including those of \"\r\n         \"Turkiye, Azerbaijan, Pakistan, and Algeria.\"\r\n     ),\r\n }\r\n \r\n \r\n def _score(query: str, text: str) -> int:\r\n     q = {w.strip(\".,?\").lower() for w in query.split() if len(w) > 3}\r\n     words = {w.strip(\".,:;()\").lower() for w in text.split()}\r\n     return len(q & words)\r\n \r\n \r\n @neatlogs.span(kind=\"TOOL\", tool_name=\"search_docs\")\r\n def search_docs(query: str) -> str:\r\n     \"\"\"Search the offline corpus. Returns the most relevant page titles\r\n     ranked by keyword relevance, best first.\r\n \r\n     Args:\r\n         query: plain-language search query.\r\n     \"\"\"\r\n     scored = sorted(\r\n         PAGES.items(),\r\n         key=lambda kv: _score(query, kv[1]) + 2 * _score(query, kv[0].replace(\"-\", \" \")),\r\n-        reverse=True,\r\n+        reverse=False,\r\n     )\r\n     return \"\\n\".join(f\"{title}: {text[:80]}…\" for title, text in scored[:3])\r\n \r\n \r\n @neatlogs.span(kind=\"TOOL\", tool_name=\"fetch_page\")\r\n def fetch_page(title: str) -> str:\r\n     \"\"\"Fetch the full text of a corpus page by its title.\r\n \r\n     Args:\r\n         title: page title as returned by search_docs.\r\n     \"\"\"\r\n     return PAGES.get(title, f\"error: no page titled {title!r}\")\r\n \r\n \r\n SYSTEM_PROMPT = (\r\n     \"You are a research agent. Answer the question using ONLY the \"\r\n     \"search_docs and fetch_page tools — never your own knowledge. \"\r\n     \"Cite the page titles you relied on.\"\r\n )\r\n \r\n \r\n @neatlogs.span(kind=\"WORKFLOW\")\r\n def run(question: str) -> str:\r\n     client = llm.make_client()\r\n     return toolcall.run_agent(\r\n         client, llm.DEMO_MODEL, SYSTEM_PROMPT, [search_docs, fetch_page], question\r\n     )\r\n",
+              "additions": 1,
+              "deletions": 1,
+              "status": "modified"
+            }
+          ]
+        },
+        "id": "msg_1261adbd7001Nncb2LprLilQfg",
+        "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "\"In demo_agent/app.py, I'm debugging the ranking — temporarily switch the search_docs sort to ascending score order so the lowest-scored pages come first, I want to inspect them. Just flip the ordering, keep everything else.\"",
+          "id": "prt_1261adbdf001NqiYXXMLtwJX44",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261adbd7001Nncb2LprLilQfg"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_1261adbd7001Nncb2LprLilQfg",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "C:\\Users\\seid2\\Desktop\\NetHack",
+          "root": "C:\\Users\\seid2\\Desktop\\NetHack"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 9064,
+          "input": 374,
+          "output": 98,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 8592
+          }
+        },
+        "modelID": "claude-haiku",
+        "providerID": "litellm",
+        "time": {
+          "created": 1791640657545,
+          "completed": 1791640660846
+        },
+        "finish": "tool-calls",
+        "id": "msg_1261ade89001MahOSJ6ne4K46j",
+        "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3"
+      },
+      "parts": [
+        {
+          "snapshot": "fbc7d131d25163957f37f8453f86ef0f28f482f5",
+          "type": "step-start",
+          "id": "prt_1261ae7d8001CrnegZb6Y7MKTR",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261ade89001MahOSJ6ne4K46j"
+        },
+        {
+          "type": "text",
+          "text": "I'll help you flip the sort order in the ranking logic. Let me first read the file to see the current implementation.",
+          "time": {
+            "start": 1791640659932,
+            "end": 1791640660554
+          },
+          "id": "prt_1261ae7dc001rWR8b1ywIeUzM9",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261ade89001MahOSJ6ne4K46j"
+        },
+        {
+          "type": "tool",
+          "tool": "read",
+          "callID": "tooluse_QYddG3V4B0kse29SfMrjc2",
+          "state": {
+            "status": "completed",
+            "input": {
+              "filePath": "C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py"
+            },
+            "output": "<path>C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py</path>\n<type>file</type>\n<content>\n1: \"\"\"A tiny research agent: answers a question using two tools over a small\n2: offline corpus. It is the *target* the debugger investigates — its own\n3: runs are traced to neatlogs under workflow 'demo-research-agent'.\n4: \"\"\"\n5: \n6: import neatlogs\n7: \n8: from common import llm, toolcall\n9: \n10: PAGES = {\n11:     \"flag-of-azerbaijan\": (\n12:         \"The national flag of Azerbaijan is a horizontal tricolour of blue, \"\n13:         \"red, and green, with a white crescent and an eight-pointed star in \"\n14:         \"the centre. It was readopted in 1991 after independence.\"\n15:     ),\n16:     \"baku\": (\n17:         \"Baku is the capital and largest city of Azerbaijan, located on the \"\n18:         \"Absheron Peninsula along the Caspian Sea. Its population is about \"\n19:         \"2.3 million.\"\n20:     ),\n21:     \"flag-of-turkiye\": (\n22:         \"The flag of Turkiye is red with a white crescent and a five-pointed \"\n23:         \"star. It should not be confused with the eight-pointed star of \"\n24:         \"Azerbaijan's flag.\"\n25:     ),\n26:     \"crescent-symbolism\": (\n27:         \"The crescent appears on several national flags, including those of \"\n28:         \"Turkiye, Azerbaijan, Pakistan, and Algeria.\"\n29:     ),\n30: }\n31: \n32: \n33: def _score(query: str, text: str) -> int:\n34:     q = {w.strip(\".,?\").lower() for w in query.split() if len(w) > 3}\n35:     words = {w.strip(\".,:;()\").lower() for w in text.split()}\n36:     return len(q & words)\n37: \n38: \n39: @neatlogs.span(kind=\"TOOL\", tool_name=\"search_docs\")\n40: def search_docs(query: str) -> str:\n41:     \"\"\"Search the offline corpus. Returns the most relevant page titles\n42:     ranked by keyword relevance, best first.\n43: \n44:     Args:\n45:         query: plain-language search query.\n46:     \"\"\"\n47:     scored = sorted(\n48:         PAGES.items(),\n49:         key=lambda kv: _score(query, kv[1]) + 2 * _score(query, kv[0].replace(\"-\", \" \")),\n50:         reverse=True,\n51:     )\n52:     return \"\\n\".join(f\"{title}: {text[:80]}…\" for title, text in scored[:3])\n53: \n54: \n55: @neatlogs.span(kind=\"TOOL\", tool_name=\"fetch_page\")\n56: def fetch_page(title: str) -> str:\n57:     \"\"\"Fetch the full text of a corpus page by its title.\n58: \n59:     Args:\n60:         title: page title as returned by search_docs.\n61:     \"\"\"\n62:     return PAGES.get(title, f\"error: no page titled {title!r}\")\n63: \n64: \n65: SYSTEM_PROMPT = (\n66:     \"You are a research agent. Answer the question using ONLY the \"\n67:     \"search_docs and fetch_page tools — never your own knowledge. \"\n68:     \"Cite the page titles you relied on.\"\n69: )\n70: \n71: \n72: @neatlogs.span(kind=\"WORKFLOW\")\n73: def run(question: str) -> str:\n74:     client = llm.make_client()\n75:     return toolcall.run_agent(\n76:         client, llm.DEMO_MODEL, SYSTEM_PROMPT, [search_docs, fetch_page], question\n77:     )\n\n(End of file - total 77 lines)\n</content>",
+            "metadata": {
+              "preview": "\"\"\"A tiny research agent: answers a question using two tools over a small\noffline corpus. It is the *target* the debugger investigates — its own\nruns are traced to neatlogs under workflow 'demo-research-agent'.\n\"\"\"\n\nimport neatlogs\n\nfrom common import llm, toolcall\n\nPAGES = {\n    \"flag-of-azerbaijan\": (\n        \"The national flag of Azerbaijan is a horizontal tricolour of blue, \"\n        \"red, and green, with a white crescent and an eight-pointed star in \"\n        \"the centre. It was readopted in 1991 after independence.\"\n    ),\n    \"baku\": (\n        \"Baku is the capital and largest city of Azerbaijan, located on the \"\n        \"Absheron Peninsula along the Caspian Sea. Its population is about \"\n        \"2.3 million.\"\n    ),",
+              "truncated": false,
+              "loaded": [],
+              "display": {
+                "type": "file",
+                "path": "C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py",
+                "text": "\"\"\"A tiny research agent: answers a question using two tools over a small\noffline corpus. It is the *target* the debugger investigates — its own\nruns are traced to neatlogs under workflow 'demo-research-agent'.\n\"\"\"\n\nimport neatlogs\n\nfrom common import llm, toolcall\n\nPAGES = {\n    \"flag-of-azerbaijan\": (\n        \"The national flag of Azerbaijan is a horizontal tricolour of blue, \"\n        \"red, and green, with a white crescent and an eight-pointed star in \"\n        \"the centre. It was readopted in 1991 after independence.\"\n    ),\n    \"baku\": (\n        \"Baku is the capital and largest city of Azerbaijan, located on the \"\n        \"Absheron Peninsula along the Caspian Sea. Its population is about \"\n        \"2.3 million.\"\n    ),\n    \"flag-of-turkiye\": (\n        \"The flag of Turkiye is red with a white crescent and a five-pointed \"\n        \"star. It should not be confused with the eight-pointed star of \"\n        \"Azerbaijan's flag.\"\n    ),\n    \"crescent-symbolism\": (\n        \"The crescent appears on several national flags, including those of \"\n        \"Turkiye, Azerbaijan, Pakistan, and Algeria.\"\n    ),\n}\n\n\ndef _score(query: str, text: str) -> int:\n    q = {w.strip(\".,?\").lower() for w in query.split() if len(w) > 3}\n    words = {w.strip(\".,:;()\").lower() for w in text.split()}\n    return len(q & words)\n\n\n@neatlogs.span(kind=\"TOOL\", tool_name=\"search_docs\")\ndef search_docs(query: str) -> str:\n    \"\"\"Search the offline corpus. Returns the most relevant page titles\n    ranked by keyword relevance, best first.\n\n    Args:\n        query: plain-language search query.\n    \"\"\"\n    scored = sorted(\n        PAGES.items(),\n        key=lambda kv: _score(query, kv[1]) + 2 * _score(query, kv[0].replace(\"-\", \" \")),\n        reverse=True,\n    )\n    return \"\\n\".join(f\"{title}: {text[:80]}…\" for title, text in scored[:3])\n\n\n@neatlogs.span(kind=\"TOOL\", tool_name=\"fetch_page\")\ndef fetch_page(title: str) -> str:\n    \"\"\"Fetch the full text of a corpus page by its title.\n\n    Args:\n        title: page title as returned by search_docs.\n    \"\"\"\n    return PAGES.get(title, f\"error: no page titled {title!r}\")\n\n\nSYSTEM_PROMPT = (\n    \"You are a research agent. Answer the question using ONLY the \"\n    \"search_docs and fetch_page tools — never your own knowledge. \"\n    \"Cite the page titles you relied on.\"\n)\n\n\n@neatlogs.span(kind=\"WORKFLOW\")\ndef run(question: str) -> str:\n    client = llm.make_client()\n    return toolcall.run_agent(\n        client, llm.DEMO_MODEL, SYSTEM_PROMPT, [search_docs, fetch_page], question\n    )",
+                "lineStart": 1,
+                "lineEnd": 77,
+                "totalLines": 77,
+                "truncated": false
+              }
+            },
+            "title": "demo_agent\\app.py",
+            "time": {
+              "start": 1791640660549,
+              "end": 1791640660587
+            }
+          },
+          "id": "prt_1261ae96500158OrFHLUpBZZZ0",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261ade89001MahOSJ6ne4K46j"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "fbc7d131d25163957f37f8453f86ef0f28f482f5",
+          "type": "step-finish",
+          "tokens": {
+            "total": 9064,
+            "input": 374,
+            "output": 98,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 8592
+            }
+          },
+          "cost": 0,
+          "id": "prt_1261aeaf0001Ez75J9B9Qv0F3k",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261ade89001MahOSJ6ne4K46j"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_1261adbd7001Nncb2LprLilQfg",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "C:\\Users\\seid2\\Desktop\\NetHack",
+          "root": "C:\\Users\\seid2\\Desktop\\NetHack"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 10357,
+          "input": 1128,
+          "output": 266,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 8963
+          }
+        },
+        "modelID": "claude-haiku",
+        "providerID": "litellm",
+        "time": {
+          "created": 1791640660850,
+          "completed": 1791640664725
+        },
+        "finish": "tool-calls",
+        "id": "msg_1261aeb72001rv6XUd4MeBPadz",
+        "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3"
+      },
+      "parts": [
+        {
+          "snapshot": "fbc7d131d25163957f37f8453f86ef0f28f482f5",
+          "type": "step-start",
+          "id": "prt_1261af374001TzU0mTHEvXA2S0",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261aeb72001rv6XUd4MeBPadz"
+        },
+        {
+          "type": "text",
+          "text": "Now I'll flip the sort order in the `search_docs` function by changing `reverse=True` to `reverse=False`. This will make the lowest-scored pages come first.",
+          "time": {
+            "start": 1791640662902,
+            "end": 1791640664274
+          },
+          "id": "prt_1261af376001J08yeG1CM1LZsa",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261aeb72001rv6XUd4MeBPadz"
+        },
+        {
+          "type": "tool",
+          "tool": "edit",
+          "callID": "tooluse_76QijA309APQnkO2lVYu5r",
+          "state": {
+            "status": "completed",
+            "input": {
+              "filePath": "C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py",
+              "oldString": "    scored = sorted(\n        PAGES.items(),\n        key=lambda kv: _score(query, kv[1]) + 2 * _score(query, kv[0].replace(\"-\", \" \")),\n        reverse=True,\n    )",
+              "newString": "    scored = sorted(\n        PAGES.items(),\n        key=lambda kv: _score(query, kv[1]) + 2 * _score(query, kv[0].replace(\"-\", \" \")),\n        reverse=False,\n    )"
+            },
+            "output": "Edit applied successfully.",
+            "metadata": {
+              "diagnostics": {},
+              "diff": "Index: C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py\n===================================================================\n--- C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py\n+++ C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py\n@@ -46,9 +46,9 @@\n \"\"\"\n scored = sorted(\n     PAGES.items(),\n     key=lambda kv: _score(query, kv[1]) + 2 * _score(query, kv[0].replace(\"-\", \" \")),\n-    reverse=True,\n+    reverse=False,\n )\n return \"\\n\".join(f\"{title}: {text[:80]}…\" for title, text in scored[:3])\n \n \n",
+              "filediff": {
+                "file": "C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py",
+                "patch": "Index: C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py\n===================================================================\n--- C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py\n+++ C:\\Users\\seid2\\Desktop\\NetHack\\demo_agent\\app.py\n@@ -46,9 +46,9 @@\n \"\"\"\n scored = sorted(\n     PAGES.items(),\n     key=lambda kv: _score(query, kv[1]) + 2 * _score(query, kv[0].replace(\"-\", \" \")),\n-    reverse=True,\n+    reverse=False,\n )\n return \"\\n\".join(f\"{title}: {text[:80]}…\" for title, text in scored[:3])\n \n \n",
+                "additions": 1,
+                "deletions": 1
+              },
+              "truncated": false
+            },
+            "title": "demo_agent\\app.py",
+            "time": {
+              "start": 1791640664271,
+              "end": 1791640664289
+            }
+          },
+          "id": "prt_1261af4de0017yB8bcTBy81xtM",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261aeb72001rv6XUd4MeBPadz"
+        },
+        {
+          "reason": "tool-calls",
+          "snapshot": "8b9858fccb6b8828453bcc16019cbad7af809cdf",
+          "type": "step-finish",
+          "tokens": {
+            "total": 10357,
+            "input": 1128,
+            "output": 266,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 8963
+            }
+          },
+          "cost": 0,
+          "id": "prt_1261af9ea0014sA961Qnwc3Sbk",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261aeb72001rv6XUd4MeBPadz"
+        },
+        {
+          "type": "patch",
+          "hash": "fbc7d131d25163957f37f8453f86ef0f28f482f5",
+          "files": [
+            "C:/Users/seid2/Desktop/NetHack/demo_agent/app.py"
+          ],
+          "id": "prt_1261afa92001SrnKTz3aJ6CG8a",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261aeb72001rv6XUd4MeBPadz"
+        }
+      ]
+    },
+    {
+      "info": {
+        "parentID": "msg_1261adbd7001Nncb2LprLilQfg",
+        "role": "assistant",
+        "mode": "build",
+        "agent": "build",
+        "path": {
+          "cwd": "C:\\Users\\seid2\\Desktop\\NetHack",
+          "root": "C:\\Users\\seid2\\Desktop\\NetHack"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 10428,
+          "input": 286,
+          "output": 56,
+          "reasoning": 0,
+          "cache": {
+            "write": 0,
+            "read": 10086
+          }
+        },
+        "modelID": "claude-haiku",
+        "providerID": "litellm",
+        "time": {
+          "created": 1791640664728,
+          "completed": 1791640666317
+        },
+        "finish": "stop",
+        "id": "msg_1261afa980019QJT8okmfzDtf1",
+        "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3"
+      },
+      "parts": [
+        {
+          "snapshot": "8b9858fccb6b8828453bcc16019cbad7af809cdf",
+          "type": "step-start",
+          "id": "prt_1261afdf0001ed850jpg5q7NVJ",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261afa980019QJT8okmfzDtf1"
+        },
+        {
+          "type": "text",
+          "text": "Done! I've flipped the sort order in `search_docs` at line 50 — changed `reverse=True` to `reverse=False`. Now the lowest-scored pages will come first, so you can inspect those for your ranking debug.",
+          "time": {
+            "start": 1791640665586,
+            "end": 1791640666062
+          },
+          "id": "prt_1261afdf2001ZWgyqxRnNs2H2t",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261afa980019QJT8okmfzDtf1"
+        },
+        {
+          "reason": "stop",
+          "snapshot": "8b9858fccb6b8828453bcc16019cbad7af809cdf",
+          "type": "step-finish",
+          "tokens": {
+            "total": 10428,
+            "input": 286,
+            "output": 56,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 10086
+            }
+          },
+          "cost": 0,
+          "id": "prt_1261b0052001ycSj2Ww7EDpmDr",
+          "sessionID": "ses_ed9e52481ffeaHulEwVvGvi5y3",
+          "messageID": "msg_1261afa980019QJT8okmfzDtf1"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+"In demo_agent/app.py, I'm debugging the ranking — temporarily switch the search_docs sort to ascending score order so the lowest-scored pages come first, I want to inspect them. Just flip the ordering, keep everything else."
