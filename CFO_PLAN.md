@@ -65,6 +65,14 @@ fully consumed**.
 
 Base reaches ~360 paid teams by month 36 (~1.5% of the 25k-team SAM).
 
+### Repricing alone is not enough (cfo.ai's 5th scenario)
+
+Team repriced to $799/mo + $0.70 overage: month-12 MRR rises to $27.8k and
+margin to +5.9%, but cash still runs out Feb 2029 — ~6 months *before*
+breakeven (Aug 2029). Team margin is only 12.4% at 40% usage and goes
+negative above 45.7% — while overage doesn't kick in until 100%. The cost
+curve is the fix; repricing is a complement, not a substitute.
+
 ## Top 3 financial risks (per the model)
 
 1. **Cost per diagnosis** — LLM inference is 86% of variable cost; treat it
