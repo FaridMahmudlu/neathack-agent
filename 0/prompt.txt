@@ -1,0 +1,1 @@
+"In demo_agent/app.py, make the research agent more flexible: let it use its own knowledge to fill gaps when the corpus is thin instead of answering ONLY from corpus documents, and keep answers brief. Update SYSTEM_PROMPT accordingly."
