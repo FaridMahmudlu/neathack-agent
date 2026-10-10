@@ -6,12 +6,14 @@ Examples:
 """
 
 import argparse
+import sys
 
 import neatlogs
 from config import init_neatlogs
 
 
 def main() -> None:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(prog="agent_debugger")
     parser.add_argument("question", help="failure report / what to investigate")
     parser.add_argument("--repo", default=".", help="target repo (default: cwd)")

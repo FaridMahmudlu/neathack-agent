@@ -2,12 +2,14 @@
 """
 
 import argparse
+import sys
 
 import neatlogs
 from config import init_neatlogs
 
 
 def main() -> None:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(prog="demo_agent")
     parser.add_argument(
         "question",
