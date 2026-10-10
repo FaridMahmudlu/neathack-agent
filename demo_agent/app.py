@@ -47,7 +47,7 @@ def search_docs(query: str) -> str:
     scored = sorted(
         PAGES.items(),
         key=lambda kv: _score(query, kv[1]) + 2 * _score(query, kv[0].replace("-", " ")),
-        reverse=True,
+        reverse=False,
     )
     return "\n".join(f"{title}: {text[:80]}…" for title, text in scored[:3])
 
