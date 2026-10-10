@@ -1,0 +1,1 @@
+"In demo_agent/app.py, the temporary debug change to search_docs got committed by accident — the sort is currently ascending (reverse=False) which returns least relevant pages first. Restore descending order so the most relevant pages come first again."
