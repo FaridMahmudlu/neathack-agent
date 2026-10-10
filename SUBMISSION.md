@@ -22,6 +22,19 @@ by Entire. Three checkpoints on `main`:
 | `01M4K1P5A9NYJJNRY2D9XKJ08P` | `dece4846baaed3c5961447af4c0d99a7dd273ed1` | The regression (debug flip committed) |
 | `01M4K1V2G1WYATMGMNK0ZP2KQH` | `63e69d5a9c218ad00c6f524b1b62308be46ed6fa` | The fix, reverted after diagnosis |
 | `01M4K6CBKM821B6WC4YCNWE81Z` | `4663486` | **Autopsy's own fix** — diagnosed, applied via OpenCode, verified, + regression test |
+| `01M4K6VBSVW7RCAN0WJDGGNBHF` | `836eb38` | Scenario 2 culprit — prompt relaxed, agent stopped calling tools |
+| `01M4K77FZR530VRPBX8CTB56VM` | `eab70ea` | Scenario 2 fix — strict corpus-only prompt restored |
+
+### Two proven failure classes
+
+1. **Code regression** (`dece484`): sort flipped → wrong retrieval →
+   incomplete answer. Autopsy named the checkpoint and the `reverse=False`
+   line. → `demo_assets/diagnosis_bugged_run.json`
+2. **Prompt regression** (`836eb38`): corpus-only constraint relaxed →
+   agent skipped ALL tool calls and fabricated citations (0 tool calls in
+   the trace). Autopsy found the prompt diff, the empty `tool_calls` loop
+   exit, and proposed a defense-in-depth fix. →
+   `demo_assets/diagnosis_prompt_regression.json`
 
 Submission checkpoint link (publicly accessible):
 
