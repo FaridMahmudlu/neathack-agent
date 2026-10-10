@@ -34,6 +34,12 @@ def _get(path: str, **params):
     return r.json()
 
 
+def _post(path: str, body: dict):
+    r = httpx.post(f"{API}{path}", headers=_headers(), json=body, timeout=30)
+    r.raise_for_status()
+    return r.json()
+
+
 def list_traces(limit: int = 10, workflow_name: str | None = None) -> dict:
     params: dict = {"limit": limit}
     if workflow_name:
@@ -54,3 +60,12 @@ def get_span_payload(trace_id: str, span_id: str) -> dict:
         f"/traces/{trace_id}/spans/{span_id}/payload",
         fields="input,output,error",
     )
+
+
+def search_traces_semantic(
+    q: str, limit: int = 10, workflow_name: str | None = None
+) -> dict:
+    body: dict = {"q": q, "limit": min(limit, 50)}
+    if workflow_name:
+        body["workflowName"] = workflow_name
+    return _post("/search/traces/semantic", body)

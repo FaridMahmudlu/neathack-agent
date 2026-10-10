@@ -7,6 +7,7 @@ import json
 import os
 import shutil
 import subprocess
+import time
 from pathlib import Path
 
 _ENTIRE_BIN = Path.home() / ".local" / "bin"
@@ -68,3 +69,47 @@ def verify(cmd: str, repo_dir: str) -> None:
     print(proc.stdout[-3000:])
     if proc.returncode != 0:
         print(proc.stderr[-1000:])
+
+
+def _recent_trace_ids() -> list[dict]:
+    from . import neatlogs_api
+
+    return (neatlogs_api.list_traces(limit=15).get("data") or {}).get(
+        "traces", []
+    )
+
+
+def watch(repo_dir: str, interval: int = 30, fix: bool = False) -> None:
+    """Poll neatlogs for newly finished traces and auto-diagnose each one —
+    a regression gate: any agent run that ends gets audited immediately.
+    Skips the debugger's own 'agent-debugger' workflow to avoid recursion.
+    """
+    from . import neatlogs_api
+    from .agent import diagnose
+
+    seen = {t.get("traceId") for t in _recent_trace_ids()}
+    print(f"[watch] polling every {interval}s — seeded {len(seen)} existing traces")
+    while True:
+        time.sleep(interval)
+        for t in _recent_trace_ids():
+            tid = t.get("traceId")
+            if not tid or tid in seen:
+                continue
+            seen.add(tid)
+            meta = (neatlogs_api.get_trace(tid).get("data") or {})
+            wf = meta.get("workflowName") or meta.get("workflow_name") or "?"
+            if "agent-debugger" in str(wf):
+                print(f"[watch] skipping own investigation trace {tid[:8]}")
+                continue
+            status = meta.get("status", "?")
+            print(f"\n[watch] new trace {tid[:12]}… workflow={wf} status={status} — auditing")
+            answer = diagnose(
+                f"Audit freshly finished trace {tid} (workflow '{wf}', status "
+                f"'{status}'). If it failed, produced a wrong/incomplete "
+                f"result, or looks anomalous, find the root cause and culprit "
+                f"change. If it's healthy, say so with evidence.",
+                repo_dir=repo_dir,
+            )
+            print(answer)
+            if fix:
+                apply_fix(os.environ.get("DIAGNOSIS_OUT", "diagnosis.json"), repo_dir)

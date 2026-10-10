@@ -16,7 +16,9 @@ from config import init_neatlogs
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(prog="agent_debugger")
-    parser.add_argument("question", help="failure report / what to investigate")
+    parser.add_argument(
+        "question", nargs="?", default="", help="failure report / what to investigate"
+    )
     parser.add_argument("--repo", default=".", help="target repo (default: cwd)")
     parser.add_argument(
         "--fix",
@@ -29,7 +31,25 @@ def main() -> None:
         metavar="CMD",
         help="shell command to re-run after the fix (implies --fix)",
     )
+    parser.add_argument(
+        "--watch",
+        type=int,
+        nargs="?",
+        const=30,
+        metavar="SEC",
+        help="monitor mode: poll neatlogs every SEC (default 30) and "
+             "auto-diagnose each newly finished trace",
+    )
     args = parser.parse_args()
+
+    if args.watch is not None:
+        init_neatlogs(workflow_name="agent-debugger")
+        from agent_debugger import pipeline
+
+        pipeline.watch(args.repo, args.watch, fix=args.fix)
+        return
+    if not args.question:
+        parser.error("question is required unless --watch is used")
 
     init_neatlogs(workflow_name="agent-debugger")
     from agent_debugger.agent import diagnose

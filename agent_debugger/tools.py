@@ -145,6 +145,45 @@ def show_commit_changes(ref: str) -> str:
     return _clip(entire_cli.graph_commit(ref, _REPO_DIR))
 
 
+@neatlogs.span(kind="TOOL", tool_name="compare_traces")
+def compare_traces(trace_id_a: str, trace_id_b: str) -> str:
+    """Compare two runs side by side — e.g. a known-good trace vs a failing
+    one. Returns both span summaries plus a structural diff: tool-call
+    counts, which spans appear/disappear, and token deltas.
+
+    Args:
+        trace_id_a: first (usually baseline/healthy) trace UUID.
+        trace_id_b: second (usually failing) trace UUID.
+    """
+    a = _summarize_spans(neatlogs_api.list_spans(trace_id_a))
+    b = _summarize_spans(neatlogs_api.list_spans(trace_id_b))
+
+    def tool_calls(spans):
+        return [s for s in spans if s.get("kind") == "TOOL"]
+
+    return _clip(
+        {
+            "trace_a": {"id": trace_id_a, "spans": a, "tool_calls": len(tool_calls(a))},
+            "trace_b": {"id": trace_id_b, "spans": b, "tool_calls": len(tool_calls(b))},
+            "note": "compare span names, statuses, tool-call patterns and token usage between the two runs",
+        }
+    )
+
+
+@neatlogs.span(kind="TOOL", tool_name="find_similar_failures")
+def find_similar_failures(query: str, limit: int = 10) -> str:
+    """Semantic search over past traces — find earlier runs that failed in
+    a similar way. Use to check whether this failure is recurring and how
+    it was resolved before.
+
+    Args:
+        query: natural-language description of the failure, e.g.
+            'agent returned incomplete answer citing missing context'.
+        limit: max results (default 10).
+    """
+    return _clip(neatlogs_api.search_traces_semantic(query, limit=min(limit, 50)))
+
+
 def _git(*args: str) -> str:
     proc = subprocess.run(
         ["git", *args], cwd=_REPO_DIR, capture_output=True, text=True, timeout=30
@@ -232,6 +271,8 @@ TOOLS = [
     list_recent_traces,
     inspect_trace,
     read_span_payload,
+    compare_traces,
+    find_similar_failures,
     list_checkpoints,
     inspect_checkpoint,
     read_checkpoint_transcript,
