@@ -1,0 +1,28 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM (neatHack)",
+      "options": {
+        "baseURL": "https://litellm.vision.aivar.app/v1",
+        "apiKey": "{env:LITELLM_API_KEY}"
+      },
+      "models": {
+        "claude-haiku": { "name": "Claude Haiku" },
+        "claude-sonnet-4.6": { "name": "Claude Sonnet 4.6" }
+      }
+    }
+  },
+  "model": "litellm/claude-haiku",
+  "small_model": "litellm/claude-haiku",
+  "permission": {
+    "edit": "allow",
+    "bash": "allow",
+    "webfetch": "allow",
+    "read": "allow",
+    "list": "allow",
+    "glob": "allow",
+    "grep": "allow"
+  }
+}

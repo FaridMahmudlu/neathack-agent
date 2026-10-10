@@ -1,0 +1,1 @@
+Autopsy - a debugger for AI agent mistakes, built at neatHack 2026.
