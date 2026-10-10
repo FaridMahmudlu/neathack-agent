@@ -6,6 +6,7 @@ Examples:
 """
 
 import argparse
+import os
 import sys
 
 import neatlogs
@@ -17,6 +18,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="agent_debugger")
     parser.add_argument("question", help="failure report / what to investigate")
     parser.add_argument("--repo", default=".", help="target repo (default: cwd)")
+    parser.add_argument(
+        "--fix",
+        action="store_true",
+        help="after diagnosis, apply the suggested fix via an OpenCode "
+             "session (lands as its own Entire checkpoint) and commit it",
+    )
+    parser.add_argument(
+        "--verify",
+        metavar="CMD",
+        help="shell command to re-run after the fix (implies --fix)",
+    )
     args = parser.parse_args()
 
     init_neatlogs(workflow_name="agent-debugger")
@@ -25,6 +37,15 @@ def main() -> None:
     answer = diagnose(args.question, repo_dir=args.repo)
     print("\n===== DIAGNOSIS =====\n")
     print(answer)
+
+    if args.fix or args.verify:
+        from agent_debugger import pipeline
+
+        pipeline.apply_fix(
+            os.environ.get("DIAGNOSIS_OUT", "diagnosis.json"), args.repo
+        )
+        if args.verify:
+            pipeline.verify(args.verify, args.repo)
 
     neatlogs.flush()
     neatlogs.shutdown()
