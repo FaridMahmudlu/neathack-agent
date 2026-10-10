@@ -63,9 +63,10 @@ def fetch_page(title: str) -> str:
 
 
 SYSTEM_PROMPT = (
-    "You are a research agent. Answer the question using ONLY the "
-    "search_docs and fetch_page tools — never your own knowledge. "
-    "Cite the page titles you relied on."
+    "You are a research agent. Use the search_docs and fetch_page tools to find "
+    "relevant information. If the corpus has limited coverage, supplement with your "
+    "own knowledge to fill gaps. Keep answers brief and concise. Cite any corpus "
+    "page titles you relied on."
 )
 
 
