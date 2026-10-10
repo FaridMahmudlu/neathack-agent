@@ -83,15 +83,27 @@ opencode.json     OpenCode provider config (hackathon LiteLLM proxy)
 
 ## How it works
 
-Autopsy is an LLM agent loop (Claude Sonnet 4.6) with 12 tools:
+Autopsy is an LLM agent loop (Claude Sonnet 4.6) with 14 tools:
 
 | Tool | Evidence source |
 |---|---|
-| `list_recent_traces`, `inspect_trace`, `read_span_payload` | neatlogs Public API |
+| `list_recent_traces`, `inspect_trace`, `read_span_payload`, `compare_traces`, `find_similar_failures` | neatlogs Public API |
 | `list_checkpoints`, `inspect_checkpoint`, `read_checkpoint_transcript` | Entire checkpoints |
 | `search_code`, `show_commit_changes` | Entire graph |
 | `list_recent_commits`, `show_commit_diff`, `read_source_file` | git + source |
 | `write_diagnosis` | emits `diagnosis.json` |
+
+## Monitor mode: `--watch`
+
+Run Autopsy as a regression gate — it polls neatlogs and auto-investigates
+every newly finished trace:
+
+```bash
+.venv/Scripts/python -m agent_debugger --watch 30 --repo .
+```
+
+Add `--fix` to let it repair regressions on its own (each fix becomes an
+Entire checkpoint).
 
 Method: inspect the trace → find the span where the failure surfaced → read
 its payload → form a hypothesis → locate the implicated code → walk the

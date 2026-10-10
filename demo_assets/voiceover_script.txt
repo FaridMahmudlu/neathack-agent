@@ -14,7 +14,7 @@ Four calls to search docs. Every single one returns the same three pages.
 The problem isn't the model — it's retrieval.
 
 === SCENE 4 (28-50s)
-Autopsy investigates. It's an agent itself — twelve tools over the neatlogs
+Autopsy investigates. It's an agent itself — 14 tools over the neatlogs
 API, Entire checkpoints, and the code graph. Watch what it finds.
 
 === SCENE 5 (50-62s)

@@ -67,7 +67,7 @@ Reproduction steps + video script: [DEMO.md](DEMO.md).
 
 ## What the judges should look at
 
-1. `agent_debugger/` — the product (12 tools, agent loop, evidence model)
+1. `agent_debugger/` — the product (14 tools, agent loop, evidence model)
 2. The live diagnosis output in the demo — it names the real checkpoint ID
    and the exact `reverse=False` line
 3. The Entire commit page — 4 linked sessions including two where the coding
