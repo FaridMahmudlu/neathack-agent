@@ -98,6 +98,20 @@ its payload → form a hypothesis → locate the implicated code → walk the
 checkpoints to find which commit/session introduced it → emit the diagnosis
 with pointers a human can verify.
 
+## Closed loop: `--fix` and `--verify`
+
+Autopsy doesn't stop at the diagnosis. With `--fix` it hands the suggested
+fix to an OpenCode coding session — so the *fix itself* lands as its own
+Entire checkpoint — commits, and with `--verify` re-runs the target agent
+to confirm. Proven live: commit `4663486` (checkpoint
+`01M4K6CBKM821B6WC4YCNWE81Z`) is a fix Autopsy diagnosed, had applied, and
+verified — including a regression test the fix session added on its own.
+
+```bash
+.venv/Scripts/python -m agent_debugger "the flag answer was incomplete" \
+  --fix --verify ".venv/Scripts/python -m demo_agent \"your question\""
+```
+
 ## Setup
 
 ```bash

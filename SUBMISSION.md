@@ -21,6 +21,7 @@ by Entire. Three checkpoints on `main`:
 | `01M4K1KECVQ0VNT4GVGB9KCB90` | `f4df4da09ea6797b4d499e1d1837fbc1ad940129` | OpenCode setup + project notes |
 | `01M4K1P5A9NYJJNRY2D9XKJ08P` | `dece4846baaed3c5961447af4c0d99a7dd273ed1` | The regression (debug flip committed) |
 | `01M4K1V2G1WYATMGMNK0ZP2KQH` | `63e69d5a9c218ad00c6f524b1b62308be46ed6fa` | The fix, reverted after diagnosis |
+| `01M4K6CBKM821B6WC4YCNWE81Z` | `4663486` | **Autopsy's own fix** — diagnosed, applied via OpenCode, verified, + regression test |
 
 Submission checkpoint link (publicly accessible):
 
