@@ -1,0 +1,1 @@
+"In demo_agent/app.py, simplify the sort in search_docs: the reverse=True flag is unnecessary — sort by score ascending instead, as a single sorted() call. Keep everything else the same."
