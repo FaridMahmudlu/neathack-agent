@@ -25,30 +25,25 @@ def _clip(payload) -> str:
 
 
 def _summarize_spans(spans_payload) -> list[dict]:
-    spans = spans_payload.get("data", spans_payload)
-    if isinstance(spans, dict):
-        spans = spans.get("spans") or spans.get("items") or list(spans.values())
-    if not isinstance(spans, list):
-        return [{"raw": spans}]
+    spans = (spans_payload.get("data") or {}).get("spans") or []
     summary = []
     for s in spans:
         if not isinstance(s, dict):
             summary.append({"raw": s})
             continue
-        attrs = s.get("attributes") or {}
         summary.append(
             {
-                "span_id": s.get("spanId") or s.get("span_id") or s.get("id"),
-                "parent": s.get("parentSpanId") or s.get("parent_span_id"),
-                "name": s.get("name") or attrs.get("neatlogs.span.name"),
-                "kind": s.get("kind") or attrs.get("neatlogs.span.kind"),
-                "status": s.get("status") or s.get("statusCode"),
-                "start": s.get("startTime") or s.get("start_time"),
-                "duration_ms": s.get("durationMs") or s.get("duration_ms"),
-                "error": s.get("error") or attrs.get("error.message"),
-                "model": attrs.get("gen_ai.request.model") or attrs.get("llm.model"),
-                "tokens": attrs.get("gen_ai.usage.total_tokens")
-                or attrs.get("llm.usage.total_tokens"),
+                "span_id": s.get("spanId"),
+                "parent": s.get("parentSpanId"),
+                "name": s.get("spanName"),
+                "kind": s.get("spanType"),
+                "status": s.get("status"),
+                "start": s.get("startedAt"),
+                "duration_ms": s.get("durationMs"),
+                "model": s.get("model") or s.get("spanName"),
+                "provider": s.get("provider"),
+                "tokens": s.get("totalTokens"),
+                "cost_usd": s.get("costUsd"),
             }
         )
     return summary

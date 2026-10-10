@@ -4,9 +4,8 @@ runs are traced to neatlogs under workflow 'demo-research-agent'.
 """
 
 import neatlogs
-from google.genai import types
 
-from agent_debugger import llm
+from common import llm, toolcall
 
 PAGES = {
     "flag-of-azerbaijan": (
@@ -59,19 +58,16 @@ def fetch_page(title: str) -> str:
     return PAGES.get(title, f"error: no page titled {title!r}")
 
 
+SYSTEM_PROMPT = (
+    "You are a research agent. Answer the question using ONLY the "
+    "search_docs and fetch_page tools — never your own knowledge. "
+    "Cite the page titles you relied on."
+)
+
+
 @neatlogs.span(kind="WORKFLOW")
 def run(question: str) -> str:
     client = llm.make_client()
-    chat = client.chats.create(
-        model=llm.MODEL,
-        config=types.GenerateContentConfig(
-            system_instruction=(
-                "You are a research agent. Answer the question using ONLY the "
-                "search_docs and fetch_page tools — never your own knowledge. "
-                "Cite the page titles you relied on."
-            ),
-            tools=[search_docs, fetch_page],
-        ),
+    return toolcall.run_agent(
+        client, llm.DEMO_MODEL, SYSTEM_PROMPT, [search_docs, fetch_page], question
     )
-    resp = chat.send_message(question)
-    return resp.text or "(no answer)"

@@ -50,4 +50,7 @@ def list_spans(trace_id: str) -> dict:
 
 
 def get_span_payload(trace_id: str, span_id: str) -> dict:
-    return _get(f"/traces/{trace_id}/spans/{span_id}/payload")
+    return _get(
+        f"/traces/{trace_id}/spans/{span_id}/payload",
+        fields="input,output,error",
+    )

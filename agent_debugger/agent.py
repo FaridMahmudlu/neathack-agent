@@ -3,9 +3,10 @@ using neatlogs traces, Entire checkpoints, the code graph, and the source.
 """
 
 import neatlogs
-from google.genai import types
 
-from . import llm, tools
+from common import llm, toolcall
+
+from . import tools
 
 SYSTEM_PROMPT = """You are Autopsy, an expert debugger for AI-agent failures.
 
@@ -43,13 +44,6 @@ def diagnose(question: str, repo_dir: str = ".") -> str:
     """Investigate one failure described by `question` against `repo_dir`."""
     tools.set_repo_dir(repo_dir)
     client = llm.make_client()
-    chat = client.chats.create(
-        model=llm.MODEL,
-        config=types.GenerateContentConfig(
-            system_instruction=SYSTEM_PROMPT,
-            tools=tools.TOOLS,
-        ),
-    )
     goal = (
         f"Investigate this failure and produce a diagnosis.\n\n"
         f"Failure report: {question}\n"
@@ -57,5 +51,6 @@ def diagnose(question: str, repo_dir: str = ".") -> str:
         f"If the report names a neatlogs trace id, start there. Otherwise "
         f"list recent traces and pick the failing one that matches."
     )
-    resp = chat.send_message(goal)
-    return resp.text or "(no final answer)"
+    return toolcall.run_agent(
+        client, llm.DEBUGGER_MODEL, SYSTEM_PROMPT, tools.TOOLS, goal
+    )
