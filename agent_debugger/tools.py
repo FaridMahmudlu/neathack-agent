@@ -4,6 +4,7 @@ TOOL span, so the debugger's own investigation is traced end to end.
 
 import json
 import os
+import subprocess
 from pathlib import Path
 
 import neatlogs
@@ -144,6 +145,38 @@ def show_commit_changes(ref: str) -> str:
     return _clip(entire_cli.graph_commit(ref, _REPO_DIR))
 
 
+def _git(*args: str) -> str:
+    proc = subprocess.run(
+        ["git", *args], cwd=_REPO_DIR, capture_output=True, text=True, timeout=30
+    )
+    if proc.returncode != 0:
+        return f"[git exited {proc.returncode}] {(proc.stderr or '').strip()}"
+    return proc.stdout
+
+
+@neatlogs.span(kind="TOOL", tool_name="list_recent_commits")
+def list_recent_commits(limit: int = 10) -> str:
+    """List recent commits in the target repository — SHA, subject, and the
+    files each commit touched. Use this to attribute a suspicious function
+    to the exact commit that changed it (ground truth, not inference).
+
+    Args:
+        limit: max commits (default 10).
+    """
+    return _clip(_git("log", f"-{min(limit, 30)}", "--format=%H %s", "--name-only"))
+
+
+@neatlogs.span(kind="TOOL", tool_name="show_commit_diff")
+def show_commit_diff(ref: str) -> str:
+    """Show the actual code diff a commit introduced (git show) — the ground
+    truth of what changed, line by line.
+
+    Args:
+        ref: commit SHA or ref like HEAD~1.
+    """
+    return _clip(_git("show", ref, "--format=%H %s%n%b"))
+
+
 @neatlogs.span(kind="TOOL", tool_name="read_source_file")
 def read_source_file(path: str) -> str:
     """Read a source file from the target repository (max 400 lines).
@@ -204,6 +237,8 @@ TOOLS = [
     read_checkpoint_transcript,
     search_code,
     show_commit_changes,
+    list_recent_commits,
+    show_commit_diff,
     read_source_file,
     write_diagnosis,
 ]

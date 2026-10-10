@@ -83,14 +83,14 @@ opencode.json     OpenCode provider config (hackathon LiteLLM proxy)
 
 ## How it works
 
-Autopsy is an LLM agent loop (Claude Sonnet 4.6) with 10 tools:
+Autopsy is an LLM agent loop (Claude Sonnet 4.6) with 12 tools:
 
 | Tool | Evidence source |
 |---|---|
 | `list_recent_traces`, `inspect_trace`, `read_span_payload` | neatlogs Public API |
 | `list_checkpoints`, `inspect_checkpoint`, `read_checkpoint_transcript` | Entire checkpoints |
 | `search_code`, `show_commit_changes` | Entire graph |
-| `read_source_file` | target repository |
+| `list_recent_commits`, `show_commit_diff`, `read_source_file` | git + source |
 | `write_diagnosis` | emits `diagnosis.json` |
 
 Method: inspect the trace → find the span where the failure surfaced → read
