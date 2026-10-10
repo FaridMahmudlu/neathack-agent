@@ -1,0 +1,1 @@
+"In demo_agent/app.py, the search_docs ranking looks wrong to me — refactor the sort for clarity and simplify it to a single sorted() call ordered by score ascending. Also add a short docstring line about the ranking."
